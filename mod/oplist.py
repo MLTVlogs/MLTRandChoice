@@ -22,6 +22,26 @@ def writelist(oplist):
         lists.close()
         return 1
 
+#write the range list in a file
+def writerlist(oplist):
+    """WRITERLIST
+    
+    Saves an range list name in a file with names of lists
+    
+    -ARGS-
+    - oplist: name of the range list
+    """
+    try:
+        #Create a file to save list names
+        lists = io.open(f"files//rlists.dat","ab")
+    except FileNotFoundError:
+        return 0
+    else:
+        #Save a list name in a file
+        lists.write(f"{oplist}\n".encode())
+        lists.close()
+        return 1
+
 #Search an option list
 def searchlist(oplist):
     """SEARCHLIST
@@ -36,7 +56,27 @@ def searchlist(oplist):
     except FileNotFoundError:
         return 0
     else:
-        found = False
+        for item in lists:
+            if item.decode().rstrip("\n").capitalize() == oplist.capitalize():
+                lists.close()
+                return 1
+        lists.close()
+        return 0
+
+#Search a range list
+def searchrlist(oplist):
+    """SEARCHRLIST
+    
+    Search an range list in the file with names of lists
+    
+    -ARGS-
+    - oplist: name of the range list"""
+    try:
+        #Open the file with a list of option lists
+        lists = io.open(f"files//rlists.dat","rb")
+    except FileNotFoundError:
+        return 0
+    else:
         for item in lists:
             if item.decode().rstrip("\n").capitalize() == oplist.capitalize():
                 lists.close()
@@ -53,6 +93,23 @@ def getoplists():
     try:
         #Open the file with a list of option lists
         lists = io.open(f"files//lists.dat","rb")
+    except FileNotFoundError:
+        return None
+    else:
+        oplists = []
+        for op in lists:
+            oplists.append(op.decode().rstrip("\n"))
+        return oplists
+    
+#Create a list with range lists
+def getrangelists():
+    """GETRANGELISTS
+    
+    Create a list with all range list
+    """
+    try:
+        #Open the file with a list of option lists
+        lists = io.open(f"files//rlists.dat","rb")
     except FileNotFoundError:
         return None
     else:
@@ -93,6 +150,38 @@ def changelist(before,after):
                 lists.close()
                 return 1
 
+#Rename a range list from the list
+def changerlist(before,after):
+    """CHANGERLIST
+    
+    Rename the range list from the file with
+    name of lists
+    
+    -ARGS-
+    - before: previous name of the range list
+    - after: new name of the range list
+    """
+    #Get a list of range lists
+    rlists = getrangelists()
+    if after in rlists:
+        return 0
+    else:
+        try:
+            rlists[rlists.index(before)] = after
+        except ValueError:
+            return 0
+        else:
+            try:
+                lists = io.open("files//rlists.dat","wb")
+            except FileNotFoundError:
+                return 0
+            else:
+                #Save all current option list names
+                for rlist in rlists:
+                    lists.write(f"{rlist}\n".encode())
+                lists.close()
+                return 1
+
 #Delete an option list from the list
 def eraselist(name):
     """ERASELIST
@@ -122,6 +211,35 @@ def eraselist(name):
             lists.close()
             return 1
 
+#Delete a range list from the list
+def eraserlist(name):
+    """ERASERLIST
+    
+    Delete the name of the range list from the file with
+    name of lists
+    
+    -ARGS-
+    - name: name of the range list
+    """
+    #Get a list of range lists
+    rlists = getrangelists()
+    try:
+        rlists.remove(name)
+    except ValueError:
+        return 0
+    else:
+        try:
+            #Create and replace the file
+            lists = io.open("files//rlists.dat","wb")
+        except FileNotFoundError:
+            return 0
+        else:
+            #Save all current range list names
+            for rplist in rlists:
+                lists.write(f"{rplist}\n".encode())
+            lists.close()
+            return 1
+
 #OPTION LIST MANAGEMENT--------------------
 #Write an option in the list
 def writeop(option,oplist):
@@ -134,7 +252,7 @@ def writeop(option,oplist):
     - oplist: name of the option list"""
     try:
         #Open the option list file
-        optionlist = io.open(f"files//{oplist}.dat","ab")
+        optionlist = io.open(f"files//lists//{oplist}.dat","ab")
     except FileNotFoundError:
         return 0
     else:
@@ -143,28 +261,27 @@ def writeop(option,oplist):
         optionlist.close()
         return 1
 
-#Search an option in the list
-def searchop(option,oplist):
-    """SEARCHOP
+# #Search an option in the list
+# def searchop(option,oplist):
+#     """SEARCHOP
     
-    Search an option in a option list file
+#     Search an option in a option list file
     
-    -ARGS-
-    - option: name of an option
-    - oplist: name of the option list"""
-    try:
-        #Open the option list file
-        optionlist = io.open(f"files//{oplist}.dat","rb")
-    except FileNotFoundError:
-        return 0
-    else:
-        found = False
-        for item in optionlist:
-            if item.decode().rstrip("\n").capitalize() == option.capitalize():
-                optionlist.close()
-                return 1
-        optionlist.close()
-        return 0
+#     -ARGS-
+#     - option: name of an option
+#     - oplist: name of the option list"""
+#     try:
+#         #Open the option list file
+#         optionlist = io.open(f"files//lists//{oplist}.dat","rb")
+#     except FileNotFoundError:
+#         return 0
+#     else:
+#         for item in optionlist:
+#             if item.decode().rstrip("\n").capitalize() == option.capitalize():
+#                 optionlist.close()
+#                 return 1
+#         optionlist.close()
+#         return 0
 
 #Create a list with options from an option list
 def getoptions(oplist):
@@ -177,7 +294,7 @@ def getoptions(oplist):
     """
     try:
         #Open the option list file
-        optionlist = io.open(f"files//{oplist}.dat","rb")
+        optionlist = io.open(f"files//lists//{oplist}.dat","rb")
     except FileNotFoundError:
         return None
     else:
@@ -205,7 +322,7 @@ def changeop(before, after, oplist):
         return 0
     else:
         try:
-            optionlist = io.open(f"files//{oplist}.dat","wb")
+            optionlist = io.open(f"files//lists//{oplist}.dat","wb")
         except FileNotFoundError:
             return 0
         else:
@@ -232,7 +349,7 @@ def eraseop(option, oplist):
         return 0
     else:
         try:
-            optionlist = io.open(f"files//{oplist}.dat","wb")
+            optionlist = io.open(f"files//lists//{oplist}.dat","wb")
         except FileNotFoundError:
             return 0
         else:
@@ -251,7 +368,99 @@ def emptylist(oplist):
     - oplist: name of the option list
     """
     try:
-        optionlist = io.open(f"files//{oplist}.dat","wb")
+        io.open(f"files//lists//{oplist}.dat","wb")
+        return 1
+    except FileNotFoundError:
+        return 0
+
+#RANGE LIST MANAGEMENT--------------------
+#Write numbers in the range list
+def writenums(min, max, rlist):
+    """WRITERANGE
+    
+    Saves a range of numbers in a range list file
+    
+    -ARGS-
+    - min: minimum number of the range
+    - max: maximum number of the range
+    - rlist: name of the range list"""
+    try:
+        #Open the range list file
+        rangelist = io.open(f"files//rlists//{rlist}.dat","ab")
+    except FileNotFoundError:
+        return 0
+    else:
+        #Save all numbers in the range list file
+        for num in range(min, max + 1):
+            rangelist.write(f"{num}\n".encode())
+        rangelist.close()
+        return 1
+
+#Create a list with options from a range list
+def getnums(rlist):
+    """GETNUMS
+    
+    Create a list with all numbers of a range list
+
+    -ARGS-
+    - rlist: name of the range list
+    """
+    try:
+        #Open the option list file
+        optionlist = io.open(f"files//rlists//{rlist}.dat","rb")
+    except FileNotFoundError:
+        return None
+    else:
+        options = []
+        for op in optionlist:
+            try:
+                options.append(int(op.decode().rstrip("\n")))
+            except ValueError:
+                # If the line is not a number, skip it
+                continue
+        optionlist.close()
+        return options
+    
+#Delete an number from a range list
+def erasenum(num, rlist):
+    """ERASENUM
+
+    Delete a number from the range list file
+
+    -ARGS-
+    - num: number to delete
+    - rlist: name of the range list
+    """
+    #Get a list of options
+    numbers = getnums(rlist)
+    try:
+        if not isinstance(num, int):
+            num = int(num)
+        numbers.remove(num)
+    except ValueError:
+        return 0
+    else:
+        try:
+            optionlist = io.open(f"files//rlists//{rlist}.dat","wb")
+        except FileNotFoundError:
+            return 0
+        else:
+            for op in numbers:
+                optionlist.write(f"{op}\n".encode())
+            optionlist.close()
+            return 1
+
+#Empty a range list
+def emptyrlist(rlist):
+    """EMPTYRLIST
+    
+    Delete all numbers from the range list file
+    
+    -ARGS-
+    - oplist: name of the option list
+    """
+    try:
+        io.open(f"files//rlists//{rlist}.dat","wb")
         return 1
     except FileNotFoundError:
         return 0
@@ -267,7 +476,23 @@ def createlist(name):
     - name: name of the option list"""
     try:
         #Create a file to save list
-        oplist = io.open(f"files//{name}.dat","wb")
+        oplist = io.open(f"files//lists//{name}.dat","wb")
+    except FileNotFoundError:
+        return 0
+    else:
+        oplist.close()
+        return 1
+    
+def createrlist(name):
+    """CREATERLIST
+    
+    Create a file with the range list information
+    
+    -ARGS-
+    - name: name of the range list"""
+    try:
+        #Create a file to save list
+        oplist = io.open(f"files//rlists//{name}.dat","wb")
     except FileNotFoundError:
         return 0
     else:
@@ -284,7 +509,22 @@ def deletelist(name):
     - name: name of the option list""" 
     try:
        #Delete the file
-       os.remove(f"files//{name}.dat")
+       os.remove(f"files//lists//{name}.dat")
+    except FileNotFoundError:
+        return 0
+    else:
+        return 1
+
+def deleterlist(name):
+    """DELETERLIST
+    
+    Delete the file with the range list information
+    
+    -ARGS-
+    - name: name of the range list""" 
+    try:
+       #Delete the file
+       os.remove(f"files//rlists//{name}.dat")
     except FileNotFoundError:
         return 0
     else:
@@ -292,7 +532,7 @@ def deletelist(name):
 
 #Rename a option list file
 def renamelist(before,after):
-    """CHANGELIST
+    """RENAMELIST
     
     Rename the file with the option list information
     
@@ -302,8 +542,28 @@ def renamelist(before,after):
     """
     try:
         #Rename the file
-        os.rename(f"files//{before}.dat",f"files//{after}.dat")
+        os.rename(f"files//lists//{before}.dat",f"files//lists//{after}.dat")
     except FileNotFoundError:
         return 0
     else:
         return 1
+
+def renamerlist(before,after):
+    """RENAMERLIST
+    
+    Rename the file with the range list information
+    
+    -ARGS-
+    - before: previous name of the range list
+    - after: new name of the range list
+    """
+    try:
+        #Rename the file
+        os.rename(f"files//rlists//{before}.dat",f"files//rlists//{after}.dat")
+    except FileNotFoundError:
+        return 0
+    else:
+        return 1
+
+if __name__ == "__main__":
+    pass

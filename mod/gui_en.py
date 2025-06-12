@@ -95,6 +95,9 @@ def newlist(mainmenu):
     subtitlefont = Font(size=SUBTITLESIZE, 
                     weight=TITLEWEIGHT)
     
+    #Defining the Range List Flag
+    rlistflag = tk.BooleanVar()
+    
     #PANELS
     #Mainpanel
     mainpanel = ttk.Frame(window)
@@ -110,7 +113,11 @@ def newlist(mainmenu):
 
     #Panel 3
     panel3 = ttk.Frame(mainpanel)
-    panel3.grid(row=3)
+    panel3.grid(row=2)
+
+    #Panel 4
+    panel4 = ttk.Frame(mainpanel)
+    panel4.grid(row=3)
 
     #Title
     title = ttk.Label(panel1,text="NEW LIST",font=subtitlefont)
@@ -123,12 +130,16 @@ def newlist(mainmenu):
     tbLabel = ttk.Label(panel2,text="Name:")
     tbLabel.grid(row=0,column=0,padx=4,pady=4)
 
+    #Checkbutton
+    check = ttk.Checkbutton(panel3, text="Is a Numeric List", variable=rlistflag, onvalue=True, offvalue=False)
+    check.grid(row=0, column=0, padx=4, pady=4)
+
     #Button1 (Create)
-    button1 = ttk.Button(panel3,text="Create",command=lambda:create(textbox.get(),window))
+    button1 = ttk.Button(panel4,text="Create",command=lambda:create(textbox.get(),window,rlistflag))
     button1.grid(row=0,column=0,padx=4,pady=4)
 
     #Button2 (Create)
-    button2 = ttk.Button(panel3,text="Cancel",command=lambda:backtomain(window))
+    button2 = ttk.Button(panel4,text="Cancel",command=lambda:backtomain(window))
     button2.grid(row=0,column=1,padx=4,pady=4)
 
     #Stay Open the Window
@@ -158,9 +169,12 @@ def openlist(mainmenu):
     subtitlefont = Font(size=SUBTITLESIZE, 
                     weight=TITLEWEIGHT)
     
+    #Defining the Range List Flag
+    rlistflag = tk.BooleanVar()
+    
     #List of option lists
-    oplists = opls.getoplists()
-    oplists.sort()
+    lists = opls.getoplists()
+    lists.sort()
     
     #PANELS
     #Mainframe
@@ -179,20 +193,33 @@ def openlist(mainmenu):
     panel3 = ttk.Frame(mainframe)
     panel3.grid(row=2)
 
+    #Panel 4
+    panel4 = ttk.Frame(mainframe)
+    panel4.grid(row=3)
+
     #Title
     title = ttk.Label(panel1,text="OPEN LIST",font=subtitlefont)
     title.grid()
 
     #Combobox
-    combobox = ttk.Combobox(panel2,width=40,values=oplists,state="readonly")
+    combobox = ttk.Combobox(panel2,width=40,values=lists,state="readonly")
     combobox.grid(padx=4,pady=4)
 
-    #Button Delete/OK
-    button1 = ttk.Button(panel3,text="Open",width=20,command=lambda:open(combobox.get(),window))
+    #Checkbutton
+    check = ttk.Checkbutton(panel3, 
+                            text="Is a Numeric List", 
+                            variable=rlistflag, 
+                            onvalue=True, 
+                            offvalue=False,
+                            command=lambda:getlists(lists,rlistflag,combobox))
+    check.grid(row=0, column=0, padx=4, pady=4)
+
+    #Button OK
+    button1 = ttk.Button(panel4,text="Open",width=20,command=lambda:open(combobox.get(),window,rlistflag))
     button1.grid(column=0,row=0,padx=4,pady=4)
 
     #Button Cancel
-    button2 = ttk.Button(panel3,text="Cancel",width=20,command=lambda:backtomain(window))
+    button2 = ttk.Button(panel4,text="Cancel",width=20,command=lambda:backtomain(window))
     button2.grid(column=1,row=0,padx=4,pady=4)
 
     #Stay Open the Window
@@ -223,9 +250,12 @@ def renamelist(mainmenu):
     subtitlefont = Font(size=SUBTITLESIZE, 
                     weight=TITLEWEIGHT)
     
+    #Defining the Range List Flag
+    rlistflag = tk.BooleanVar()
+    
     #List of option lists
-    oplists = opls.getoplists()
-    oplists.sort()
+    lists = opls.getoplists()
+    lists.sort()
 
     #PANELS
     #Mainframe
@@ -248,12 +278,16 @@ def renamelist(mainmenu):
     panel4 = ttk.Frame(mainframe)
     panel4.grid(row=3)
 
+    #Panel 5
+    panel5 = ttk.Frame(mainframe)
+    panel5.grid(row=4)
+
     #Title
     title = ttk.Label(panel1,text="RENAME LIST",font=subtitlefont)
     title.grid()
 
     #Combobox
-    combobox = ttk.Combobox(panel2,width=40,values=oplists,state="readonly")
+    combobox = ttk.Combobox(panel2,width=40,values=lists,state="readonly")
     combobox.grid(padx=4,pady=4)
 
     #Textbox
@@ -263,12 +297,21 @@ def renamelist(mainmenu):
     tbLabel = ttk.Label(panel3,text="Name:")
     tbLabel.grid(row=0,column=0,padx=4,pady=4)
 
+    #Checkbutton
+    check = ttk.Checkbutton(panel4, 
+                            text="Is a Numeric List", 
+                            variable=rlistflag, 
+                            onvalue=True, 
+                            offvalue=False,
+                            command=lambda:getlists(lists,rlistflag,combobox))
+    check.grid(row=0, column=0, padx=4, pady=4)
+
     #Button Delete/OK
-    button1 = ttk.Button(panel4,text="Rename",width=20,command=lambda:rename(combobox.get(),textbox.get(),window))
+    button1 = ttk.Button(panel5,text="Rename",width=20,command=lambda:rename(combobox.get(),textbox.get(),window,rlistflag))
     button1.grid(column=0,row=0,padx=4,pady=4)
 
     #Button Cancel
-    button2 = ttk.Button(panel4,text="Cancel",width=20,command=lambda:backtomain(window))
+    button2 = ttk.Button(panel5,text="Cancel",width=20,command=lambda:backtomain(window))
     button2.grid(column=1,row=0,padx=4,pady=4)
 
     #Stay Open the Window
@@ -299,9 +342,13 @@ def deletelist(mainmenu):
     subtitlefont = Font(size=SUBTITLESIZE, 
                     weight=TITLEWEIGHT)
     
+    
+    #Defining the Range List Flag
+    rlistflag = tk.BooleanVar()
+    
     #List of option lists
-    oplists = opls.getoplists()
-    oplists.sort()
+    lists = opls.getoplists()
+    lists.sort()
 
     #PANELS
     #Mainframe
@@ -320,20 +367,33 @@ def deletelist(mainmenu):
     panel3 = ttk.Frame(mainframe)
     panel3.grid(row=2)
 
+    #Panel 3
+    panel4 = ttk.Frame(mainframe)
+    panel4.grid(row=3)
+
     #Title
     title = ttk.Label(panel1,text="DELETE LIST",font=subtitlefont)
     title.grid()
 
     #Combobox
-    combobox = ttk.Combobox(panel2,width=40,values=oplists,state="readonly")
+    combobox = ttk.Combobox(panel2,width=40,values=lists,state="readonly")
     combobox.grid(padx=4,pady=4)
 
+    #Checkbutton
+    check = ttk.Checkbutton(panel3, 
+                            text="Is a Numeric List", 
+                            variable=rlistflag, 
+                            onvalue=True, 
+                            offvalue=False,
+                            command=lambda:getlists(lists,rlistflag,combobox))
+    check.grid(row=0, column=0, padx=4, pady=4)
+
     #Button Delete/OK
-    button1 = ttk.Button(panel3,text="Delete",width=20,command=lambda:delete(combobox.get(),window))
+    button1 = ttk.Button(panel4,text="Delete",width=20,command=lambda:delete(combobox.get(),window,rlistflag))
     button1.grid(column=0,row=0,padx=4,pady=4)
 
     #Button Cancel
-    button2 = ttk.Button(panel3,text="Cancel",width=20,command=lambda:backtomain(window))
+    button2 = ttk.Button(panel4,text="Cancel",width=20,command=lambda:backtomain(window))
     button2.grid(column=1,row=0,padx=4,pady=4)
 
     #Stay Open the Window
@@ -404,16 +464,90 @@ def mainlist(mainmenu,oplist):
     button4 = ttk.Button(mainpanel,text="Delete Option",width=40,command=lambda:deleteOp(window,oplist))
     button4.grid(row=4,padx=4,pady=4)
 
-    #Button 5 (Delete Option)
+    #Button 5 (Delete All)
     button5 = ttk.Button(mainpanel,text="Delete All",width=40,command=lambda:opempty(oplist,button1,button5))
     button5.grid(row=5,padx=4,pady=4)
     if len(opls.getoptions(oplist)) == 0:
         button5.configure(state="disabled")
 
-    #Button 5 (Delete Option)
+    #Button 5 (Exit List)
     button6 = ttk.Button(mainpanel,text="Exit List",width=40,command=lambda:backtomain(window))
     button6.grid(row=6,padx=4,pady=4)
 
+    #Stay Open the Window
+    tk.mainloop()
+
+#(openlist) Main Range List Menu
+def mainrlist(mainmenu,rlist):
+    """MAINRLIST
+
+    range list main menu gui for the program
+
+    -Args-
+    - mainmenu: the tkinter root
+    - rlist: the name of the range list
+    """
+    #Delete The previous content of the window
+    mainmenu.destroy()
+
+    #Creating a Window
+    window = tk.Tk()
+    icon = tk.PhotoImage(file="artwork//favicon.png")
+
+    #Title of the Window
+    window.iconphoto(False,icon)
+    window.title("MLT RandChoice")
+    window.resizable(False,False)
+
+    #Defining Fonts
+    subtitlefont = Font(size=SUBTITLESIZE, 
+                    weight=TITLEWEIGHT)
+    
+    #PANELS
+    #Mainpanel
+    mainpanel = ttk.Frame(window)
+    mainpanel.grid(padx=10,pady=10)
+
+    #Panel 1
+    panel1 = ttk.Frame(mainpanel)
+    panel1.grid(row=1)
+
+    #Panel 2
+    panel2 = ttk.Frame(mainpanel)
+    panel2.grid(row=2)
+
+    #Panel 3
+    panel3 = ttk.Frame(mainpanel)
+    panel3.grid(row=3)
+
+    #Title
+    title = ttk.Label(mainpanel,text=rlist.upper(),font=subtitlefont)
+    title.grid(row=0)
+
+    #Button 1 (Select Option)
+    button1 = ttk.Button(mainpanel,text="Select Number",width=40,command=lambda:selectOpRange(window,rlist))
+    button1.grid(row=1,padx=4,pady=4)
+    if len(opls.getnums(rlist)) == 0:
+        button1.configure(state="disabled")
+
+    #Button 2 (Configure Range)
+    button2 = ttk.Button(mainpanel,text="Configure Range",width=40,command=lambda:confRange(window,rlist))
+    button2.grid(row=2,padx=4,pady=4)
+
+    #Button 3 (Delete Option)
+    button4 = ttk.Button(mainpanel,text="Delete Number",width=40,command=lambda:deleteNum(window,rlist))
+    button4.grid(row=4,padx=4,pady=4)
+
+    #Button 4 (Delete All)
+    button5 = ttk.Button(mainpanel,text="Delete All",width=40,command=lambda:numempty(rlist,button1,button5))
+    button5.grid(row=5,padx=4,pady=4)
+    if len(opls.getnums(rlist)) == 0:
+        button5.configure(state="disabled")
+
+    #Button 5 (Exit List)
+    button6 = ttk.Button(mainpanel,text="Exit List",width=40,command=lambda:backtomain(window))
+    button6.grid(row=6,padx=4,pady=4)
+    
     #Stay Open the Window
     tk.mainloop()
 
@@ -479,6 +613,68 @@ def selectOp(mainmenu,oplist):
     #Stay Open a Windos
     tk.mainloop()
 
+#(openlist) Select Option Event for Range List
+def selectOpRange(mainmenu,rlist):
+    """SELECTOPRANGE
+
+    Menu that selects randomly a number of a range list
+
+    -ARGS-
+    - window: the tkinter root
+    """
+
+    #Delete The previous content of the window
+    mainmenu.destroy()
+
+    #Creating a Window
+    window = tk.Tk()
+    icon = tk.PhotoImage(file="artwork//favicon.png")
+
+    #Title of the Window
+    window.iconphoto(False,icon)
+    window.title("MLT RandChoice")
+    window.resizable(False,False)
+
+    #Defining Fonts
+    subtitlefont = Font(size=SUBTITLESIZE, 
+                    weight=TITLEWEIGHT)
+    
+    #PANELS
+    #Mainpanel
+    mainpanel = ttk.Frame(window)
+    mainpanel.grid(padx=10,pady=10)
+
+    #Panel 1
+    panel1 = ttk.Frame(mainpanel)
+    panel1.grid(row=1)
+
+    #Panel 2
+    panel2 = ttk.Frame(mainpanel)
+    panel2.grid(row=2)
+
+    #Panel 3
+    panel3 = ttk.Frame(mainpanel)
+    panel3.grid(row=3)
+
+    #Title
+    title = ttk.Label(panel1, text="SELECT NUMBER", font=subtitlefont)
+    title.grid(padx=10,pady=10)
+
+    #Option Text
+    optext = ttk.Label(panel1, text="Click to Select")
+    optext.grid(padx=10,pady=10)
+
+    #Button1 (Create)
+    button1 = ttk.Button(panel3,text="Select",command=lambda:numselect(rlist,optext,button1))
+    button1.grid(row=0,column=0,padx=4,pady=4)
+
+    #Button2 (Create)
+    button2 = ttk.Button(panel3,text="Exit",command=lambda:mainrlist(window,rlist))
+    button2.grid(row=0,column=1,padx=4,pady=4)
+
+    #Stay Open a Windos
+    tk.mainloop()
+
 #(openlist) Add Option Menu
 def addOp(mainmenu,oplist):
     """ADDOP
@@ -538,6 +734,82 @@ def addOp(mainmenu,oplist):
 
     #Stay Open the Window
     window.mainloop()    
+
+#(openlist) Configure Range Menu
+def confRange(mainmenu,rlist):
+    """CONFRANGE
+    
+    menu gui for configure a range list
+    
+    -Args-
+    - mainmenu: the tkinter root"""
+    #Delete The previous content of the window
+    mainmenu.destroy()
+
+    #Creating a Window
+    window = tk.Tk()
+    icon = tk.PhotoImage(file="artwork//favicon.png")
+
+    #Title of the Window
+    window.iconphoto(False,icon)
+    window.title("MLT RandChoice")
+    window.resizable(False,False)
+
+    #Defining Fonts
+    subtitlefont = Font(size=SUBTITLESIZE, 
+                    weight=TITLEWEIGHT)
+    
+    #PANELS
+    #Mainframe
+    mainframe = ttk.Frame(window)
+    mainframe.grid(padx=10, pady=10)
+
+    #Panel 1
+    panel1 = ttk.Frame(mainframe)
+    panel1.grid(row=0, column=0, columnspan=2)
+
+    #Panel 2
+    panel2 = ttk.Frame(mainframe)
+    panel2.grid(row=1, column=0)
+
+    #Panel 3
+    panel3 = ttk.Frame(mainframe)
+    panel3.grid(row=1, column=1)
+
+    #Panel 4
+    panel4 = ttk.Frame(mainframe)
+    panel4.grid(row=2, column=0, columnspan=2)
+
+    #Title
+    title = ttk.Label(panel1,text="CONFIGURE RANGE",font=subtitlefont)
+    title.grid()
+
+    #Label (Minimum)
+    minLabel = ttk.Label(panel2,text="Minimum:")
+    minLabel.grid(row=0,column=0,padx=4,pady=4)
+    #Spinbox (Minimum)
+    minSpin = ttk.Spinbox(panel2,from_=-10000,to=10000,width=10)
+    minSpin.set(0)
+    minSpin.grid(row=1,column=0,padx=4,pady=4)
+
+    #Label (Maximum)
+    maxLabel = ttk.Label(panel3,text="Maximum:")
+    maxLabel.grid(row=0,column=0,padx=4,pady=4)
+    #Spinbox (Maximum)
+    maxSpin = ttk.Spinbox(panel3,from_=-10000,to=10000,width=10)
+    maxSpin.set(1)
+    maxSpin.grid(row=1,column=0,padx=4,pady=4)
+
+    #Button1 Configure
+    button1 = ttk.Button(panel4,text="Configure",width=20,command=lambda:rangeconfig(rlist,minSpin.get(),maxSpin.get(),window))
+    button1.grid(column=0,row=0,padx=4,pady=4)
+
+    #Button2 Cancel
+    button2 = ttk.Button(panel4,text="Cancel",width=20,command=lambda:mainrlist(window,rlist))
+    button2.grid(column=1,row=0,padx=4,pady=4)
+
+    #Stay Open the Window
+    window.mainloop()
 
 #(openlist) Rename Option Menu
 def renameOp(mainmenu,oplist):
@@ -680,7 +952,93 @@ def deleteOp(mainmenu,oplist):
     #Stay Open the Window
     window.mainloop()  
 
+#(openlist) Delete Number Menu
+def deleteNum(mainmenu,rlist):
+    """DELETENUM
+
+    menu gui for delete a number of the range list
+
+    -Args-
+    - window: the tkinter root"""
+
+    #Delete The previous content of the window
+    mainmenu.destroy()
+
+    #Creating a Window
+    window = tk.Tk()
+    icon = tk.PhotoImage(file="artwork//favicon.png")
+
+    #Title of the Window
+    window.iconphoto(False,icon)
+    window.title("MLT RandChoice")
+    window.resizable(False,False)
+
+    #Defining Fonts
+    subtitlefont = Font(size=SUBTITLESIZE, 
+                    weight=TITLEWEIGHT)
+    
+    #List of option lists
+    nums = opls.getnums(rlist)
+    nums.sort()
+    
+    #PANELS
+    #Mainframe
+    mainframe = ttk.Frame(window)
+    mainframe.grid(padx=10, pady=10)
+
+    #Panel 1
+    panel1 = ttk.Frame(mainframe)
+    panel1.grid(row=0)
+
+    #Panel 2
+    panel2 = ttk.Frame(mainframe)
+    panel2.grid(row=1)
+
+    #Panel 3
+    panel3 = ttk.Frame(mainframe)
+    panel3.grid(row=2)
+
+    #Title
+    title = ttk.Label(panel1,text="DELETE NUMBER",font=subtitlefont)
+    title.grid()
+
+    #Combobox
+    combobox = ttk.Combobox(panel2,width=40,values=nums,state="readonly")
+    combobox.grid(padx=4,pady=4)
+
+    #Button Delete/OK
+    button1 = ttk.Button(panel3,text="Delete",width=20,command=lambda:numdelete(combobox.get(),rlist,window))
+    button1.grid(column=0,row=0,padx=4,pady=4)
+
+    #Button Cancel
+    button2 = ttk.Button(panel3,text="Cancel",width=20,command=lambda:mainrlist(window,rlist))
+    button2.grid(column=1,row=0,padx=4,pady=4)
+
+    #Stay Open the Window
+    window.mainloop()
+
 #GUI COMMANDS--------------------
+#Get all options or range list
+def getlists(lists,isrange,combobox):
+    """GETLISTS
+    
+    procedure that gives all option list or all range list
+    depending of the boolean value of "isrange"
+
+    -ARGS-
+
+    -lists: a list to save the option lists or range lists names.
+    -isrange: variable that indicates if option lists or range lists 
+    names is required
+    -combobox: combobox where the lists names is saved.
+    """
+    if isrange.get() == False:
+        lists = opls.getoplists()
+    elif isrange.get() == True:
+        lists = opls.getrangelists()
+    lists.sort()
+    combobox.config(values=lists)
+
 #Go Back to the Main Menu
 def backtomain(window):
     """BACKTOMAIN
@@ -696,8 +1054,8 @@ def backtomain(window):
         pass
     main()
 
-#Create a list event
-def create(oplist,window):
+#Event to Create an option or range list
+def create(oplist,window,isrange):
     """CREATE
 
     Event to create a option list and save it in a file with name of all lists.
@@ -709,25 +1067,37 @@ def create(oplist,window):
     oplist: name of an option list.
     window: the tkinter root for exit.
     """
-    #If a list exists
-    if(opls.searchlist(oplist) == 1):
-        mb.showinfo(title="List Exists",message=f"The Option List \"{oplist}\" exists")
-    #Create a new option
-    elif(opls.searchlist(oplist) == 0):
-        #If a list has as name "lists"
-        if(oplist == "lists"):
-            mb.showwarning(title="Reserved Name",message=f"\"lists\" is a reserved name")
-        #If a list hasn't name
-        elif(oplist == ""):
-            backtomain(window)
-        else:
-            #Error Prevention
-            if opls.writelist(oplist) == 0 or opls.createlist(oplist) == 0:
-                mb.showerror(title="Error",message="There is an error creating the option list.")
-            backtomain(window)
+    if isrange.get() == False:
+        #If a list exists
+        if(opls.searchlist(oplist) == 1):
+            mb.showinfo(title="List Exists",message=f"The Option List \"{oplist}\" exists")
+        #Create a new option
+        elif(opls.searchlist(oplist) == 0):
+            #If a list hasn't name
+            if(oplist == ""):
+                backtomain(window)
+            else:
+                #Error Prevention
+                if opls.writelist(oplist) == 0 or opls.createlist(oplist) == 0:
+                    mb.showerror(title="Error",message="There is an error creating the option list.")
+                backtomain(window)
+    elif isrange.get() == True:
+        #If a list exists
+        if(opls.searchrlist(oplist) == 1):
+            mb.showinfo(title="List Exists",message=f"The Numeric List \"{oplist}\" exists")
+        #Create a new option
+        elif(opls.searchrlist(oplist) == 0):
+            #If a list hasn't name
+            if(oplist == ""):
+                backtomain(window)
+            else:
+                #Error Prevention
+                if opls.writerlist(oplist) == 0 or opls.createrlist(oplist) == 0:
+                    mb.showerror(title="Error",message="There is an error creating the numeric list.")
+                backtomain(window)
 
-#Event to Open a option list
-def open(oplist,window):
+#Event to Open an option or range list
+def open(oplist,window,isrange):
     """OPEN
 
     Event to open a option list and bring a menu of the option list
@@ -737,11 +1107,15 @@ def open(oplist,window):
     oplist: name of an option list to open.
     window: the tkinter root for exit.
     """
-    if oplist != "":
-        mainlist(window,oplist)
+    if isrange.get() == False:
+        if oplist != "":
+            mainlist(window,oplist)
+    elif isrange.get() == True:
+        if oplist != "":
+            mainrlist(window,oplist)
 
-#Event to Delete a option list
-def delete(oplist,window):
+#Event to Delete an option or range list
+def delete(oplist,window,isrange):
     """DELETE
 
     Event to delete a option list
@@ -751,13 +1125,23 @@ def delete(oplist,window):
     oplist: name of an option list to delete.
     window: the tkinter root for exit.
     """
-    if oplist != "":
-        if opls.eraselist(oplist) == 0 or opls.deletelist(oplist) == 0:
-            mb.showerror(title="Error",message="There is an error deleting the option list.")
-        backtomain(window)
-
-#Event to Rename a option list
-def rename(oplist,newname,window):
+    if isrange.get() == False:
+        if oplist != "":
+            question = mb.askyesno(title="Delete Option List",message="Are you sure you want to delete this option list?")
+            if question != False:
+                if opls.eraselist(oplist) == 0 or opls.deletelist(oplist) == 0:
+                    mb.showerror(title="Error",message="There is an error deleting the option list.")
+            backtomain(window)
+    elif isrange.get() == True:
+        if oplist != "":
+            question = mb.askyesno(title="Delete Numeric List",message="Are you sure you want to delete this numeric list?")
+            if question != False:
+                if opls.eraserlist(oplist) == 0 or opls.deleterlist(oplist) == 0:
+                    mb.showerror(title="Error",message="There is an error deleting the numeric list.")
+            backtomain(window)
+    
+#Event to Rename an option or range list
+def rename(oplist,newname,window,isrange):
     """RENAME
 
     Event to rename a option list
@@ -768,13 +1152,28 @@ def rename(oplist,newname,window):
     newname: the new name for the option list
     window: the tkinter root for exit.
     """
-    if oplist != "" and newname != "":
-        if newname in opls.getoplists() or newname == oplist:
-            mb.showinfo(title="List Exists",message=f"The Option List \"{newname}\" exists")
-        else:
-            if opls.changelist(oplist,newname) == 0 or opls.renamelist(oplist,newname) == 0:
-                mb.showerror(title="Error",message="There is an error renaming the option list.")
-            backtomain(window)
+    if isrange.get() == False:
+        if oplist != "" and newname != "":
+            if newname in opls.getoplists() or newname == oplist:
+                mb.showinfo(title="List Exists",message=f"The Option List \"{newname}\" exists")
+            else:
+                question = mb.askyesno(title="Rename Option List",message="Are you sure you want to rename this option list?")
+                if question != False:
+                    #Error Prevention
+                    if opls.changelist(oplist,newname) == 0 or opls.renamelist(oplist,newname) == 0:
+                        mb.showerror(title="Error",message="There is an error renaming the option list.")
+                backtomain(window)
+    elif isrange.get() == True:
+        if oplist != "" and newname != "":
+            if newname in opls.getrangelists() or newname == oplist:
+                mb.showinfo(title="List Exists",message=f"The Option List \"{newname}\" exists")
+            else:
+                question = mb.askyesno(title="Rename Numeric List",message="Are you sure you want to rename this numeric list?")
+                if question != False:
+                    #Error Prevention
+                    if opls.changerlist(oplist,newname) == 0 or opls.renamerlist(oplist,newname) == 0:
+                        mb.showerror(title="Error",message="There is an error renaming the numeric list.")
+                backtomain(window)
 
 #Select randomly an option of the option list
 def opselect(oplist,label,button):
@@ -797,6 +1196,27 @@ def opselect(oplist,label,button):
     except AttributeError:
         pass
 
+#Select randomly a number of the range list
+def numselect(rlist,label,button):
+    """NUMSELECT
+
+    Event to select randomly a number of the range list
+
+    -ARGS-
+
+    rlist: name of a range list to select from.
+    label: the label to display the selected number.
+    button: the button to disable after selection.
+    """
+    nums = opls.getnums(rlist)
+    maxnum = len(nums)
+    randnum = random.randint(0,maxnum-1)
+    try:
+        label.configure(text=nums[randnum])
+        button.configure(state="disabled")
+    except AttributeError:
+        pass
+
 #Event to Add an option in the list
 def opadd(option,oplist,window):
     """OPADD
@@ -813,6 +1233,43 @@ def opadd(option,oplist,window):
         if opls.writeop(option,oplist) == 0:
             mb.showerror(title="Error",message="There is an error creating an option.")
         mainlist(window,oplist) 
+
+#Event to Configure a range list
+def rangeconfig(rlist, minval, maxval, window):
+    """RANGECONFIG
+
+    Event to configure a range list
+
+    -ARGS-
+
+    rlist: name of the range list to configure
+    minval: minimum value for the range
+    maxval: maximum value for the range
+    window: the tkinter root to exit
+    """
+    if rlist != "":
+        try:
+            minval_int = int(minval)
+            maxval_int = int(maxval)
+        except ValueError:
+            mb.showerror(title="Input Error", message="Minimum and maximum values must be integers.")
+            return
+        if minval_int < maxval_int:
+            if len(opls.getnums(rlist)) == 0:
+                if opls.writenums(minval_int, maxval_int, rlist) == 0:
+                    mb.showerror(title="Error",message="There is an error creating the numeric list.")
+                mainrlist(window,rlist)
+            else:
+                question = mb.askyesno(title="Configure Range List",message="Are you sure you want to change the range of this list?")
+                if question != False:
+                    if opls.emptyrlist(rlist) == 0:
+                        mb.showerror(title="Error",message="There is an error changing the range of the list.")
+                    else:
+                        if opls.writenums(minval_int, maxval_int, rlist) == 0:
+                            mb.showerror(title="Error",message="There is an error changing the range of the list.")
+                    mainrlist(window,rlist)
+        else:
+            mb.showerror(title="Range Numbers Error",message="The minimum value must be less than the maximum value.")
 
 #Event to Rename an option from the list
 def oprename(option, newname, oplist, window):
@@ -845,9 +1302,30 @@ def opdelete(option, oplist, window):
     window: the tkinter root to exit
     """ 
     if option != "":
-        if opls.eraseop(option,oplist) == 0:
-            mb.showerror(title="Error",message="There is an error deleting the option.")
+        question = mb.askyesno(title="Delete the option",message="Are you sure you want to delete the option of the list?")
+        if question != False:
+            if opls.eraseop(option,oplist) == 0:
+                mb.showerror(title="Error",message="There is an error deleting the option.")
         mainlist(window,oplist)
+
+#Event to Delete an number from the range list
+def numdelete(num, rlist, window):
+    """NUMDELETE
+
+    Event to delete a number from the range list
+
+    -ARGS-
+
+    num: name of the number to delete
+    rlist: name of the range list.
+    window: the tkinter root to exit
+    """ 
+    if num != "":
+        question = mb.askyesno(title="Delete the number",message="Are you sure you want to delete the number of the list?")
+        if question != False:
+            if opls.erasenum(num,rlist) == 0:
+                mb.showerror(title="Error",message="There is an error deleting the number.")
+        mainrlist(window,rlist)
 
 #Event to Delete all options from the list
 def opempty(oplist, button1, button2):
@@ -860,13 +1338,42 @@ def opempty(oplist, button1, button2):
     oplist: name of the option list.
     button1: select option button to disable
     button2: delete all button to disable
-    """ 
-    if opls.emptylist(oplist) == 0:
-        mb.showerror(title="Error",message="There is an error to empty the option list.")
-    else:
-        mb.showinfo(title="List empty", message="The list is already empty.")
-        try:
-            button1.configure(state="disabled")
-            button2.configure(state="disabled")
-        except AttributeError:
-            pass
+    """
+    question = mb.askyesno(title="Delete All Options",message="Are you sure you want to empty the optionlist?")
+    if question != False:
+        if opls.emptylist(oplist) == 0:
+            mb.showerror(title="Error",message="There is an error to empty the option list.")
+        else:
+            mb.showinfo(title="List empty", message="The list is already empty.")
+            try:
+                button1.configure(state="disabled")
+                button2.configure(state="disabled")
+            except AttributeError:
+                pass
+
+#Event to Delete all numbers from the range list
+def numempty(rlist, button1, button2):
+    """NUMEMPTY
+
+    Event to delete all numbers from the range list
+
+    -ARGS-
+
+    rlist: name of the range list.
+    button1: select option button to disable
+    button2: delete all button to disable
+    """
+    question = mb.askyesno(title="Delete All Numbers",message="Are you sure you want to empty the numeric list?")
+    if question != False:
+        if opls.emptyrlist(rlist) == 0:
+            mb.showerror(title="Error",message="There is an error to empty the numeric list.")
+        else:
+            mb.showinfo(title="List empty", message="The list is already empty.")
+            try:
+                button1.configure(state="disabled")
+                button2.configure(state="disabled")
+            except AttributeError:
+                pass
+
+if __name__ == "__main__":
+    pass
